@@ -1,0 +1,15 @@
+{
+  "name": "mercury-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "socket.io": "^3.0.0",
+    "uuid": "^8.3.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
