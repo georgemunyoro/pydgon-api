@@ -5,10 +5,14 @@ WORKDIR /usr/src/mercury-api
 
 # Install application dependancies
 COPY package*.json ./
-RUN npm install
+
+RUN yarn install
+RUN npm install -g typescript@latest
 
 # Bundle application source
 COPY . .
 
-EXPOSE 8080
+RUN tsc
+
+EXPOSE 5000
 CMD [ "node", "dist/index.js" ]
