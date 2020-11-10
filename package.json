@@ -11,7 +11,8 @@
     "uuid": "^8.3.1"
   },
   "scripts": {
-    "start": "nodemon dist/index.js",
+    "compile": "tsc",
+    "start": "ts-node index.ts",
     "test": "mocha -r ts-node/register './{,!(node_modules)/**}/*.test.ts'"
   },
   "devDependencies": {
