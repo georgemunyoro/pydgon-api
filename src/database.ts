@@ -1,7 +1,7 @@
 import { Pool, Client } from 'pg';
 
-export function getDatabaseConnection(): Promise {
-    const promise = new Promise((resolve, reject) => {
+export function getDatabaseConnection(): Promise<Client> {
+    const promise: Promise<Client> = new Promise((resolve, reject) => {
         try {
             const client = new Client();
             client.connect();
@@ -10,10 +10,11 @@ export function getDatabaseConnection(): Promise {
             reject(error);
         }
     });
+    return promise;
 }
 
-export function query(databaseConnection: Client, query: String): Promise {
-    const promise = new Promise(async (resolve, reject) => {
+export function query(databaseConnection: Client, query: string): Promise<any> {
+    const promise: Promise<any> = new Promise(async (resolve, reject) => {
         try {
             const res = await databaseConnection.query(query);
             await databaseConnection.end();
@@ -22,4 +23,5 @@ export function query(databaseConnection: Client, query: String): Promise {
             reject(error);
         }
     });
+    return promise;
 }

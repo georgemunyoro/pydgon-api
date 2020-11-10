@@ -22,6 +22,7 @@ function getDatabaseConnection() {
             reject(error);
         }
     });
+    return promise;
 }
 exports.getDatabaseConnection = getDatabaseConnection;
 function query(databaseConnection, query) {
@@ -35,6 +36,7 @@ function query(databaseConnection, query) {
             reject(error);
         }
     }));
+    return promise;
 }
 exports.query = query;
 //# sourceMappingURL=database.js.map
