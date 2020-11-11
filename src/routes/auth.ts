@@ -1,7 +1,6 @@
 import * as express from "express";
 import { check, validationResult } from "express-validator";
 import { User } from "../models/user";
-import { createHash } from "crypto";
 
 export const authRouter = express.Router();
 
