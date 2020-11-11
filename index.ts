@@ -1,20 +1,22 @@
-import { Socket } from 'dgram';
-import express from 'express';
-import { routes } from './routes';
+import { Socket } from "dgram";
+import express from "express";
+import { router } from "./src/routes";
 
-const app = express()
-let http = require('http').Server(app);
-let io = require('socket.io')(http);
+const app = express();
 
-app.use('/api/v1/', routes);
+let http = require("http").Server(app);
+let io = require("socket.io")(http);
 
-io.on('connection', (socket: Socket) => {
-    socket.on('chat-message', (msg: String) => {
-        io.sockets.emit('chat-message', msg);
-    });
+app.use(express.json());
+app.use("/api/v1/", router);
+
+io.on("connection", (socket: Socket) => {
+  socket.on("chat-message", (msg: String) => {
+    io.sockets.emit("chat-message", msg);
+  });
 });
 
 const port: Number | string = process.env.PORT || 5000;
 http.listen(port, () => {
-    console.log('Server is started at http://localhost:' + port);
+  console.log("Server is started at http://localhost:" + port);
 });
