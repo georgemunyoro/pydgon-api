@@ -33,7 +33,7 @@ export async function registerUser(req: express.Request, res: express.Response) 
       const newUser: UserRegistrationForm = { firstname, lastname, email, username, password };
       newUser.password = createHash("sha256").update(newUser.password).digest("base64");
 
-      const createdUser = await User.create(user);
+      const createdUser = await User.create(newUser);
 
       return res.status(200).json({
         message: "Created User",
