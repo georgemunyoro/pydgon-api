@@ -1,0 +1,6 @@
+{
+  "database": {
+    "connectionString": "postgres://{user}:{password}@{hostname}:{port}/{database-name}"
+  },
+  "secret": "secret"
+}

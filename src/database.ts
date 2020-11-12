@@ -1,4 +1,4 @@
 import { Sequelize } from "sequelize";
-import databaseConfig from "../config/database.json";
+import { database } from "../config/config.json";
 
-export const sequelize = new Sequelize(databaseConfig.connectionString);
+export const sequelize = new Sequelize(database.connectionString);
