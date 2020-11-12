@@ -1,8 +1,10 @@
 import { Socket } from "dgram";
 import express from "express";
 import { router } from "./src/routes";
+import cors from 'cors';
 
 const app = express();
+app.use(cors())
 
 let http = require("http").Server(app);
 let io = require("socket.io")(http);
