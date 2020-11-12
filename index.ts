@@ -22,3 +22,5 @@ const port: Number | string = process.env.PORT || 5000;
 http.listen(port, () => {
   console.log("Server is started at http://localhost:" + port);
 });
+
+export default app;
