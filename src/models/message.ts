@@ -9,11 +9,11 @@ export const Message = sequelize.define('Message', {
     autoIncrement: true,
   },
   sender: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: false,
   },
   recepient: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: false,
   },
   content: {

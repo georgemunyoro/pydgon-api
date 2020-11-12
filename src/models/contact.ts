@@ -9,13 +9,17 @@ export const Contact = sequelize.define('Contact', {
     autoIncrement: true,
   },
   user: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: false,
   },
   contact: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: false,
   },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 }, {
   timestamps: true,
 });
