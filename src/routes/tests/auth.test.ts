@@ -12,6 +12,7 @@ chai.use(chaiHttp);
 describe("Auth", () => {
   beforeEach(function () {
     return new Promise(async function (resolve) {
+      await User.sync();
       await User.create({
         username: "johndoe",
         firstname: "john",
