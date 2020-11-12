@@ -7,15 +7,7 @@ export const authRouter = express.Router();
 import * as userController from "../controllers/userController";
 import * as authController from "../controllers/authController";
 
-authRouter.get("/drop", async (req: express.Request, res: express.Response) => {
-  User.drop();
-
-  res.status(200).json({
-    message: "Dropped User DB",
-  });
-});
-
-authRouter.get('/', authController.authenticatedUser);
+authRouter.get("/", authController.authenticatedUser);
 
 authRouter.post(
   "/register",
@@ -55,21 +47,21 @@ authRouter.post(
   authController.registerUser
 );
 
-authRouter.post("/login", [
-  check('email')
-    .isEmail()
-    .withMessage('Invalid email adress')
-    .normalizeEmail(),
-], (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const error = validationResult(req).formatWith(({ msg }) => msg);
-  if (!error.isEmpty()) {
-    return res.status(422).json({
-      message: 'An error ocurred',
-      data: {
-        error: error.array(),
-      },
-    });
-  }
+authRouter.post(
+  "/login",
+  [check("email").isEmail().withMessage("Invalid email adress").normalizeEmail()],
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const error = validationResult(req).formatWith(({ msg }) => msg);
+    if (!error.isEmpty()) {
+      return res.status(422).json({
+        message: "An error ocurred",
+        data: {
+          error: error.array(),
+        },
+      });
+    }
 
-  next();
-}, authController.loginUser);
+    next();
+  },
+  authController.loginUser
+);
