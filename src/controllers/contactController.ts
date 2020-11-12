@@ -81,7 +81,7 @@ export async function createContactPost(req: express.Request, res: express.Respo
       message: "An error ocurred",
       data: {
         error,
-      }
-    })
+      },
+    });
   }
 }

@@ -18,9 +18,9 @@ interface UserLoginFOrm {
 }
 
 interface JWT {
-  id: number,
-  iat: number,
-  exp: number,
+  id: number;
+  iat: number;
+  exp: number;
 }
 
 export async function registerUser(req: express.Request, res: express.Response) {
@@ -31,8 +31,6 @@ export async function registerUser(req: express.Request, res: express.Response) 
 
     if (!user) {
       const newUser: UserRegistrationForm = { firstname, lastname, email, username, password };
-
-      // Set password to hashed version
       newUser.password = createHash("sha256").update(newUser.password).digest("base64");
 
       const createdUser = await User.create(user);
@@ -101,12 +99,11 @@ export async function loginUser(req: express.Request, res: express.Response) {
 }
 
 export async function getRequestAuthUser(req: express.Request): Promise<[boolean, any]> {
-  const token: any = req.header('X-Auth');
+  const token: any = req.header("X-Auth");
   try {
     const decoded: any = jwt.verify(token, applicationConfig.secret);
     const authenticatedUser = await User.findByPk(decoded.id);
-    return [false, {authenticatedUser}];
-
+    return [false, { authenticatedUser }];
   } catch (error) {
     return [true, error];
   }
@@ -118,25 +115,24 @@ export async function authenticatedUser(req: express.Request, res: express.Respo
 
     if (!err) {
       return res.status(200).json({
-        message: 'Authenticated User',
+        message: "Authenticated User",
         data,
       });
     }
 
     return res.status(403).json({
-      message: 'An error ocurred',
+      message: "An error ocurred",
       data: {
         errors: [data.message],
       },
     });
-
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      message: 'An error ocurred',
+      message: "An error ocurred",
       data: {
         errors: [error],
-      }
+      },
     });
   }
 }

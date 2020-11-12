@@ -17,12 +17,12 @@ export async function messageList(req: express.Request, res: express.Response) {
       });
     }
 
-    if (req.params.userId === 'undefined') {
+    if (req.params.userId === "undefined") {
       return res.status(404).json({
         message: "Missing required parameters",
         data: {
-          errors: ["uuid is undefined"]
-        }
+          errors: ["uuid is undefined"],
+        },
       });
     }
 
