@@ -18,7 +18,7 @@
   "scripts": {
     "compile": "tsc",
     "start": "ts-node index.ts",
-    "test": "mocha -r ts-node/register './{,!(node_modules)/**}/*.test.ts'"
+    "test": "mocha --exit -r ts-node/register './{,!(node_modules)/**}/*.test.ts'"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",
