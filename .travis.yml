@@ -4,8 +4,13 @@ node_js:
 
 services:
   - docker
+  - postgresql
+
+before_script:
+  - psql -c "CREATE DATABASE mercury_db;" -U postgres
+  - psql -c "CREATE USER mercury WITH PASSWORD 'root'" -U postgres
 
 before_install:
-- docker build -t mercury/api .
-- docker ps -a
-- docker run mercury/api /bin/sh -c "yarn run test"
+  - docker build -t mercury/api .
+  - docker ps -a
+  - docker run mercury/api /bin/sh -c "yarn run test"
