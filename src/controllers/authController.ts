@@ -100,7 +100,7 @@ export async function loginUser(req: express.Request, res: express.Response) {
   }
 }
 
-export async function getRequestAuthUser(req: express.Request) {
+export async function getRequestAuthUser(req: express.Request): Promise<[boolean, any]> {
   const token: any = req.header('X-Auth');
   try {
     const decoded: any = jwt.verify(token, applicationConfig.secret);
