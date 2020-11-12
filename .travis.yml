@@ -7,7 +7,6 @@ services:
   - postgresql
 
 before_install:
-  - docker ps -a
   - docker-compose up --build -d
-  - docker build -t mercury/api .
-  - docker run mercury/api /bin/sh -c "yarn run test"
+  - docker ps
+  - docker run mercury-api/mercury-api /bin/sh -c "yarn run test"
