@@ -26,14 +26,30 @@ export async function messageList(req: express.Request, res: express.Response) {
       });
     }
 
-    const messages = await Message.findAll({
-      where: {
-        [Op.or]: [
-          { sender: data.authenticatedUser.uuid, recepient: req.params.userId },
-          { sender: req.params.userId, recepient: data.authenticatedUser.uuid },
-        ],
-      },
-    });
+    await Message.sync();
+
+    let messages;
+    if (req.query.unread != null) {
+      messages = await Message.findAll({
+        where: {
+          [Op.or]: [
+            { sender: data.authenticatedUser.uuid, recepient: req.params.userId, read: false },
+            { sender: req.params.userId, recepient: data.authenticatedUser.uuid, read: false },
+          ],
+        },
+      });
+    } else {
+      messages = await Message.findAll({
+        where: {
+          [Op.or]: [
+            { sender: data.authenticatedUser.uuid, recepient: req.params.userId },
+            { sender: req.params.userId, recepient: data.authenticatedUser.uuid },
+          ],
+        },
+      });
+    }
+
+    console.log(req.query);
 
     return res.status(200).json({
       message: "Messages",

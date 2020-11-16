@@ -2,7 +2,8 @@ import * as express from "express";
 import jwt from "jsonwebtoken";
 import { createHash } from "crypto";
 import { User } from "../models/user";
-import applicationConfig from "../../config/config.json";
+
+const secret = process.env.SECRET;
 
 interface UserRegistrationForm {
   firstname: string;
@@ -27,6 +28,7 @@ export async function registerUser(req: express.Request, res: express.Response) 
   const { firstname, lastname, email, username, password }: UserRegistrationForm = req.body;
 
   try {
+    await User.sync();
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -63,6 +65,7 @@ export async function registerUser(req: express.Request, res: express.Response) 
 export async function loginUser(req: express.Request, res: express.Response) {
   const { email, password } = req.body;
   try {
+    await User.sync();
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -77,7 +80,7 @@ export async function loginUser(req: express.Request, res: express.Response) {
     const correctPassword =
       user.getDataValue("password") == createHash("sha256").update(password).digest("base64");
     if (correctPassword) {
-      const token = jwt.sign({ id: user.getDataValue("id") }, applicationConfig.secret, {
+      const token = jwt.sign({ id: user.getDataValue("id") }, secret!, {
         expiresIn: "24h",
       });
 
@@ -101,7 +104,8 @@ export async function loginUser(req: express.Request, res: express.Response) {
 export async function getRequestAuthUser(req: express.Request): Promise<[boolean, any]> {
   const token: any = req.header("X-Auth");
   try {
-    const decoded: any = jwt.verify(token, applicationConfig.secret);
+    const decoded: any = jwt.verify(token, secret!);
+    await User.sync();
     const authenticatedUser = await User.findByPk(decoded.id);
     return [false, { authenticatedUser }];
   } catch (error) {

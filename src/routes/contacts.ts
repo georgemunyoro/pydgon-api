@@ -5,3 +5,4 @@ export const contactRouter = express.Router();
 
 contactRouter.get("/", contacts.contactList);
 contactRouter.post("/:uuid", contacts.createContactPost);
+contactRouter.delete("/:uuid", contacts.deleteContact);

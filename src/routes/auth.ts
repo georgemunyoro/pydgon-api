@@ -9,12 +9,16 @@ import * as authController from "../controllers/authController";
 
 authRouter.get("/", authController.authenticatedUser);
 
+function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 authRouter.post(
   "/register",
   [
     check(["firstname", "lastname", "username"])
       .isLength({ min: 2 })
-      .withMessage("Firstname must contain at least 2 letters")
+      .withMessage((value, { req, location, path }) => `${capitalize(path)} should contain at least 2 characters`)
       .trim(),
 
     check("email").isEmail().withMessage("Invalid email adress").normalizeEmail(),

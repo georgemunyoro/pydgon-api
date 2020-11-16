@@ -1,6 +1,0 @@
-{
-  "database": {
-    "connectionString": "postgres://mercury:root@localhost:3333/mercury_db"
-  },
-  "secret": "secret"
-}

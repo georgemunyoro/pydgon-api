@@ -9,7 +9,7 @@ chai.should();
 
 describe("Users", () => {
   describe("GET /", () => {
-    beforeEach(function() {
+    beforeEach(function(): Promise<void> {
       return new Promise(async function (resolve) {
         await User.sync();
         resolve();

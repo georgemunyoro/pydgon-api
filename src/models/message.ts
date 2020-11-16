@@ -5,10 +5,10 @@ export const Message = sequelize.define(
   "Message",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
     },
     sender: {
       type: DataTypes.UUID,
@@ -19,9 +19,13 @@ export const Message = sequelize.define(
       allowNull: false,
     },
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
+    read: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    }
   },
   {
     timestamps: true,

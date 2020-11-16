@@ -10,7 +10,7 @@ import { User } from "../../models/user";
 chai.use(chaiHttp);
 
 describe("Auth", () => {
-  beforeEach(function () {
+  beforeEach(function (): Promise<void> {
     return new Promise(async function (resolve) {
       await User.sync();
       await User.create({

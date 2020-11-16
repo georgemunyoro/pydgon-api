@@ -1,4 +1,10 @@
 import { Sequelize } from "sequelize";
-import { database } from "../config/config.json";
+import * as dotenv from "dotenv";
 
-export const sequelize = new Sequelize(database.connectionString);
+dotenv.config();
+
+const connectionString = process.env.DB_CONNECTION_STRING;
+
+export const sequelize = new Sequelize(connectionString!, {
+  logging: false,
+});
