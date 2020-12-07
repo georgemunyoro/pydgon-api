@@ -1,27 +1,10 @@
-import { Pool, Client } from 'pg';
+import { Sequelize } from "sequelize";
+import * as dotenv from "dotenv";
 
-export function getDatabaseConnection(): Promise<Client> {
-    const promise: Promise<Client> = new Promise((resolve, reject) => {
-        try {
-            const client = new Client();
-            client.connect();
-            resolve(client);
-        } catch (error) {
-            reject(error);
-        }
-    });
-    return promise;
-}
+dotenv.config();
 
-export function query(databaseConnection: Client, query: string): Promise<any> {
-    const promise: Promise<any> = new Promise(async (resolve, reject) => {
-        try {
-            const res = await databaseConnection.query(query);
-            await databaseConnection.end();
-            resolve(200);
-        } catch (error) {
-            reject(error);
-        }
-    });
-    return promise;
-}
+const connectionString = process.env.DB_CONNECTION_STRING;
+
+export const sequelize = new Sequelize(connectionString!, {
+  logging: false,
+});

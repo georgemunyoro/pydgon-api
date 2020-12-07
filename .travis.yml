@@ -4,8 +4,9 @@ node_js:
 
 services:
   - docker
+  - postgresql
 
 before_install:
-- docker build -t mercury/api .
-- docker ps -a
-- docker run mercury/api /bin/sh -c "yarn run test"
+  - docker-compose up --build -d
+  - docker ps
+  - docker run mercury-api_mercury-api /bin/sh -c "yarn run test"

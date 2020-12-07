@@ -1,0 +1,27 @@
+version: "3"
+services:
+  mercury-api:
+    container_name: mercury-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: "${DB_URL}"
+      NODE_ENV: development
+      PORT: 5000
+    ports:
+      - "5000:5000"
+  postgres:
+    container_name: postgres
+    image: postgres:12.4
+    ports:
+      - "3333:5432"
+    volumes:
+      - ./postgresdata:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASS}"
+      POSTGRES_DB: mercury_db
