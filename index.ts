@@ -1,39 +1,41 @@
-import { Socket } from "dgram";
-import express from "express";
-import { router } from "./src/routes";
-import cors from "cors";
+import {Socket} from 'dgram';
+import express from 'express';
+import {router} from './src/routes';
+import cors from 'cors';
+import logger from 'morgan';
 
-import { Message } from "./src/models/message";
-import { Contact } from "./src/models/contact";
-import { User } from "./src/models/user";
+import {Message} from './src/models/message';
+import {Contact} from './src/models/contact';
+import {User} from './src/models/user';
 
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 
-let http = require("http").Server(app);
-let io = require("socket.io")(http);
+let http = require('http').Server(app);
+let io = require('socket.io')(http);
 
 app.use(express.json());
-app.use("/api/v1/", router);
+app.use(logger('dev'));
+app.use('/api/v1/', router);
 
-io.on("connection", (socket: Socket) => {
-  socket.on("user-online", (user: any) => {
-    io.sockets.emit("user-online", user);
+io.on('connection', (socket: Socket) => {
+  socket.on('user-online', (user: any) => {
+    io.sockets.emit('user-online', user);
   });
 
-  socket.on("user-offline", (user: any) => {
-    io.sockets.emit("user-offline", user);
+  socket.on('user-offline', (user: any) => {
+    io.sockets.emit('user-offline', user);
   });
 
-  socket.on("status-check", (userId: string) => {
-    io.sockets.emit(userId + "-status-check");
+  socket.on('status-check', (userId: string) => {
+    io.sockets.emit(userId + '-status-check');
   });
 
-  socket.on("message-read", async (msg: any) => {
+  socket.on('message-read', async (msg: any) => {
     try {
       let message = await Message.findOne({
         where: {
@@ -42,17 +44,17 @@ io.on("connection", (socket: Socket) => {
       });
 
       if (message) {
-        console.log("MEG", message.getDataValue("id"));
-        message.setDataValue("read", true);
+        console.log('MEG', message.getDataValue('id'));
+        message.setDataValue('read', true);
         await message.save();
-        io.sockets.emit(msg.id + "-read", message);
+        io.sockets.emit(msg.id + '-read', message);
       }
     } catch (error) {
       console.error(error);
     }
   });
 
-  socket.on("chat-message", async (msg: any) => {
+  socket.on('chat-message', async (msg: any) => {
     console.log(msg);
     const message = await Message.create(msg);
     const userHasContact = await Contact.findOne({
@@ -72,7 +74,7 @@ io.on("connection", (socket: Socket) => {
       Contact.create({
         user: msg.recepient,
         contact: msg.sender,
-        name: sender?.getDataValue("username"),
+        name: sender?.getDataValue('username'),
       });
     }
 
@@ -82,7 +84,7 @@ io.on("connection", (socket: Socket) => {
 
 const port: Number | string = process.env.PORT || 5000;
 http.listen(port, () => {
-  console.log("Server is started at http://localhost:" + port);
+  console.log('Server is started at http://localhost:' + port);
 });
 
 export default app;

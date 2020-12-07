@@ -18,7 +18,7 @@ authRouter.post(
   [
     check(["firstname", "lastname", "username"])
       .isLength({ min: 2 })
-      .withMessage((value, { req, location, path }) => `${capitalize(path)} should contain at least 2 characters`)
+      .withMessage((value, { path }) => `${capitalize(path)} should contain at least 2 characters`)
       .trim(),
 
     check("email").isEmail().withMessage("Invalid email adress").normalizeEmail(),
@@ -42,7 +42,7 @@ authRouter.post(
     const error = validationResult(req).formatWith(({ msg }) => msg);
     if (!error.isEmpty()) {
       return res.status(422).json({
-        error: error.array(),
+        errors: error.array(),
       });
     }
 
@@ -55,17 +55,17 @@ authRouter.post(
   "/login",
   [check("email").isEmail().withMessage("Invalid email adress").normalizeEmail()],
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const error = validationResult(req).formatWith(({ msg }) => msg);
-    if (!error.isEmpty()) {
-      return res.status(422).json({
-        message: "An error ocurred",
-        data: {
-          error: error.array(),
-        },
-      });
-    }
+	const error = validationResult(req).formatWith(({ msg }) => msg);
+	if (!error.isEmpty()) {
+	  return res.status(422).json({
+		message: "An error ocurred",
+		data: {
+		  errors: error.array(),
+		},
+	  });
+	}
 
-    next();
+	next();
   },
   authController.loginUser
 );

@@ -4,7 +4,7 @@ import { User } from "../models/user";
 // Display list of all Users
 export async function userList(req, res) {
   try {
-    await User.sync();
+    await User.sync({ alter: { drop: false } });
     const users = await User.findAll({
       attributes: ["username", "uuid"],
     });
@@ -31,7 +31,7 @@ export async function userDetail(req: express.Request, res: express.Response) {
   try {
     const uuid = req.params.userId;
 
-    await User.sync();
+    await User.sync({ alter: { drop: false } });
     const user = await User.findOne({
       where: { uuid },
       attributes: { exclude: ["email", "password"] },

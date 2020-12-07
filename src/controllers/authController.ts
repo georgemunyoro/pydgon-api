@@ -28,7 +28,7 @@ export async function registerUser(req: express.Request, res: express.Response) 
   const { firstname, lastname, email, username, password }: UserRegistrationForm = req.body;
 
   try {
-    await User.sync();
+    await User.sync({ alter: { drop: false } });
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -56,7 +56,7 @@ export async function registerUser(req: express.Request, res: express.Response) 
     return res.status(500).json({
       message: "ERR",
       data: {
-        error,
+        errors: [error.message],
       },
     });
   }
@@ -65,7 +65,7 @@ export async function registerUser(req: express.Request, res: express.Response) 
 export async function loginUser(req: express.Request, res: express.Response) {
   const { email, password } = req.body;
   try {
-    await User.sync();
+    await User.sync({ alter: { drop: false } });
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -105,7 +105,7 @@ export async function getRequestAuthUser(req: express.Request): Promise<[boolean
   const token: any = req.header("X-Auth");
   try {
     const decoded: any = jwt.verify(token, secret!);
-    await User.sync();
+    await User.sync({ alter: { drop: false } });
     const authenticatedUser = await User.findByPk(decoded.id);
     return [false, { authenticatedUser }];
   } catch (error) {

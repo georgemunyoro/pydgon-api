@@ -61,7 +61,7 @@ export async function deleteContact(req: express.Request, res: express.Response)
       });
     }
 
-    await Contact.sync();
+    await Contact.sync({ alter: { drop: false } });
     const contact = await Contact.destroy({
       where: {
         user: data.authenticatedUser.uuid,
@@ -75,7 +75,7 @@ export async function deleteContact(req: express.Request, res: express.Response)
         contact,
       },
     });
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     return res.status(500).json({
       message: "An error ocurred",
@@ -101,8 +101,10 @@ export async function createContactPost(req: express.Request, res: express.Respo
       });
     }
 
-    await Contact.sync();
-    const duplicateContact = await Contact.findOne({ where: { user: data.authenticatedUser.uuid, contact: req.params.uuid } });
+    await Contact.sync({ alter: { drop: false } });
+    const duplicateContact = await Contact.findOne({
+      where: { user: data.authenticatedUser.uuid, contact: req.params.uuid },
+    });
 
     if (duplicateContact) {
       return res.status(403).json({
@@ -118,7 +120,7 @@ export async function createContactPost(req: express.Request, res: express.Respo
     const contact = await Contact.create({
       user: data.authenticatedUser.uuid,
       contact: req.params.uuid,
-      name: (name == null || name == undefined) ? user?.getDataValue("username") : name,
+      name: name == null || name == undefined ? user?.getDataValue("username") : name,
     });
 
     return res.status(200).json({

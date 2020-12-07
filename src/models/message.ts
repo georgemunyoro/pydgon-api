@@ -25,7 +25,15 @@ export const Message = sequelize.define(
     read: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-    }
+    },
+    embededMessage: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    embededFile: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   },
   {
     timestamps: true,

@@ -26,7 +26,7 @@ export async function messageList(req: express.Request, res: express.Response) {
       });
     }
 
-    await Message.sync();
+    await Message.sync({ alter: { drop: false } });
 
     let messages;
     if (req.query.unread != null) {
