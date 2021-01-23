@@ -3,8 +3,8 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const connectionString = process.env.DB_CONNECTION_STRING;
+const databaseConnectionString = process.env.DB_CONNECTION_STRING;
 
-export const sequelize = new Sequelize(connectionString!, {
+export const sequelize = new Sequelize(databaseConnectionString!, {
   logging: false,
 });
