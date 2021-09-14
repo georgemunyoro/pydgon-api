@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                      Int                       @id @default(autoincrement())
+  firstName               String
+  lastName                String
+  userName                String
+  uuid                    String                    @unique @default(uuid()) @db.Uuid
+  password                String
+  createdAt               DateTime                  @default(now())
+  email                   String                    @unique
+  isVerified              Boolean                   @default(false)
+  sentMessages            Message[]                 @relation("_ReceivedMessagesToUser")
+  receivedMessages        Message[]                 @relation("_SentMessagesToUser")
+  ConversationParticipant ConversationParticipant[]
+}
+
+model Message {
+  id             Int           @id @unique @default(autoincrement())
+  uuid           String        @unique @default(uuid()) @db.Uuid
+  sender         User          @relation(fields: [senderId], references: [uuid], name: "_SentMessagesToUser")
+  senderId       String        @db.Uuid
+  recepient      User          @relation(fields: [recepientId], references: [uuid], name: "_ReceivedMessagesToUser")
+  recepientId    String        @db.Uuid
+  content        String
+  read           Boolean       @default(false)
+  replyTo        Message?      @relation(fields: [replyToId], references: [uuid])
+  replyToId      String        @db.Uuid
+  embeddedFile   String?
+  timeSent       DateTime      @default(now())
+  Message        Message[]     @relation("MessageToMessage")
+  Conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  conversationId Int?
+}
+
+model Conversation {
+  id           Int                       @id @unique @default(autoincrement())
+  uuid         String                    @unique @default(uuid()) @db.Uuid
+  messages     Message[]
+  participants ConversationParticipant[]
+}
+
+model ConversationParticipant {
+  id             Int          @id @unique @default(autoincrement())
+  uuid           String       @unique @default(uuid()) @db.Uuid
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+  conversationId Int
+  userId         Int
+}
