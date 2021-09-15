@@ -1,5 +1,7 @@
+import { Prisma } from "@prisma/client";
 import * as express from "express";
 import { check, validationResult } from "express-validator";
+import { prisma } from "../db";
 
 import * as authController from "../controllers/authController";
 
@@ -51,17 +53,17 @@ authRouter.post(
   "/login",
   [check("email").isEmail().withMessage("Invalid email adress").normalizeEmail()],
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-	const error = validationResult(req).formatWith(({ msg }) => msg);
-	if (!error.isEmpty()) {
-	  return res.status(422).json({
-		message: "An error ocurred",
-		data: {
-		  errors: error.array(),
-		},
-	  });
-	}
+    const error = validationResult(req).formatWith(({ msg }) => msg);
+    if (!error.isEmpty()) {
+      return res.status(422).json({
+        message: "An error ocurred",
+        data: {
+          errors: error.array(),
+        },
+      });
+    }
 
-	next();
+    next();
   },
   authController.loginUser
 );
