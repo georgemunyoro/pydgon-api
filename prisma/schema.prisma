@@ -54,7 +54,7 @@ model ConversationParticipant {
   id             Int          @id @unique @default(autoincrement())
   uuid           String       @unique @default(uuid()) @db.Uuid
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  user           User         @relation(fields: [userId], references: [id])
+  user           User         @relation(fields: [userId], references: [uuid])
   conversationId Int
-  userId         Int
+  userId         String       @db.Uuid
 }
